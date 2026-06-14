@@ -102,3 +102,25 @@ clone repo
 - Never commit weights, audio, session outputs, or `.hf_token`.
 - Determinism is a gate, not a nice‑to‑have — never bypass a failing
   determinism/checksum check; fix the cause.
+
+---
+
+## 6. Secrets — Hugging Face token
+
+The A/B sandbox needs an HF token to pull gated/reference models. It is **local
+only**, read from `sota_sandbox/.hf_token`, and is gitignored — it must never be
+committed or pasted into chat/docs.
+
+**Rotate before first use** (a token was exposed in early planning chat → treat it
+as compromised):
+1. https://huggingface.co/settings/tokens → **Revoke** the old token →
+   **New token** (a *read* scope is sufficient for pulling weights).
+2. Save it locally (stays gitignored, no code change needed):
+   ```bash
+   printf '%s' 'hf_YOUR_NEW_TOKEN' > sota_sandbox/.hf_token
+   ```
+3. Confirm it never enters git: `git status` must not list `.hf_token`.
+
+The core pipeline (Layers 0–3) does **not** need any token — weights are
+pre‑staged and SHA‑256‑verified offline. The token is only for the optional
+`sota_sandbox/` comparator.
