@@ -31,6 +31,9 @@ WavLM** features, and emits **only verified, uncontaminated** target‑speech cl
 | `make_checksums.py` | generate/verify the weight registry |
 
 ## Run it
+Start with **[`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md)** — what's done,
+what's left, and the exact order of operations to a working demo.
+
 The pipeline is authored on macOS (stdlib‑only self‑tests, no CUDA) and executes
 on Ubuntu 22.04 + an NVIDIA RTX 6000 Ada. Follow
 **[`UBUNTU_DEPLOYMENT_RUNBOOK.md`](UBUNTU_DEPLOYMENT_RUNBOOK.md)** end‑to‑end;

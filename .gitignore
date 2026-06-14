@@ -12,6 +12,6 @@ __pycache__/
 .DS_Store
 *_tmp.html
 
-# the SOTA A/B sandbox is a separate tool (and holds a local token) — not part
-# of this pipeline repo.
-sota_sandbox/
+# The SOTA A/B sandbox lives in sota_sandbox/ and is tracked. Its OWN
+# sota_sandbox/.gitignore keeps the local HF token (.hf_token) and its outputs
+# out of git — never commit those.

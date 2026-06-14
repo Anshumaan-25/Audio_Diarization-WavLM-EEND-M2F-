@@ -1,0 +1,42 @@
+# =============================================================================
+# SOTA SANDBOX — isolated dependencies  (DO NOT merge into the pipeline's
+# requirements.txt — this is a separate experiment in a separate virtualenv)
+# =============================================================================
+#
+# Target box: Ubuntu 22.04, NVIDIA RTX 6000 Ada (CUDA 12.x), Python 3.10.
+#
+# Install (on the Ubuntu machine):
+#   python3.10 -m venv .venv-sota
+#   source .venv-sota/bin/activate
+#   pip install --upgrade pip
+#   # 1) CUDA build of torch/torchaudio from the cu121 wheel index:
+#   pip install torch==2.1.2 torchaudio==2.1.2 \
+#       --index-url https://download.pytorch.org/whl/cu121
+#   # 2) the rest from PyPI:
+#   pip install -r requirements-sota.txt
+#
+# torch/torchaudio are listed below (pinned) for the record, but MUST be
+# installed from the cu121 index above to get CUDA wheels — plain PyPI gives
+# CPU-only builds. The version pins match the pipeline's torch (2.1.2+cu121)
+# so the two stacks could even share a wheel cache, though the venvs stay
+# separate by design.
+
+# --- core neural diarizer ----------------------------------------------------
+pyannote.audio==3.1.1          # PyAnnote speaker-diarization-3.1 pipeline (gated)
+
+# --- torch stack (install from the cu121 index — see header) -----------------
+torch==2.1.2
+torchaudio==2.1.2
+
+# --- io / hub ----------------------------------------------------------------
+huggingface_hub>=0.19,<0.21    # gated-model auth (token)
+soundfile>=0.12                # wav read/write backend for torchaudio
+numpy==1.26.4                  # pin <2.0 — torch 2.1.2 predates numpy 2
+
+# --- optional: WavLM-based alternative diarizer ------------------------------
+# Uncomment if you want to A/B a WavLM/transformers pipeline instead of (or
+# alongside) PyAnnote 3.1. Kept commented so the default install stays lean.
+# transformers>=4.36,<4.46
+#
+# NOTE: ffmpeg is a SYSTEM package, not pip — `sudo apt-get install -y ffmpeg`.
+#       run_sota.py shells out to it to extract a 16 kHz mono wav from the mp4.

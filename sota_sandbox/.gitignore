@@ -1,0 +1,9 @@
+# SOTA sandbox — never commit secrets, model outputs, or scratch audio.
+.hf_token
+sota_output.json
+work/
+*.wav
+*.manifest.jsonl          # input manifests + generated *.clean.* redacted copies
+__pycache__/
+*.pyc
+.venv-sota/
