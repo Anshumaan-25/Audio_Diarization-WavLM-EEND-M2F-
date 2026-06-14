@@ -1,0 +1,33 @@
+# =============================================================================
+# WavLM + EEND-M2F forensic diarization pipeline — pinned dependencies
+# Target: Ubuntu 22.04, NVIDIA RTX 6000 Ada (CUDA 12.x), Python 3.10.
+# (This is the PIPELINE's requirements — separate from sota_sandbox/.)
+# =============================================================================
+#
+# INSTALL ORDER (see UBUNTU_SETUP_GUIDE.md):
+#   1) CUDA build of torch/torchaudio from the cu121 wheel index:
+#        pip install torch==2.1.2 torchaudio==2.1.2 \
+#            --index-url https://download.pytorch.org/whl/cu121
+#   2) the rest:
+#        pip install -r requirements.txt
+#
+# torch/torchaudio are pinned below for the record but MUST come from the cu121
+# index above (plain PyPI gives CPU-only wheels).
+
+torch==2.1.2
+torchaudio==2.1.2
+
+transformers>=4.38,<4.46     # WavLM front-end / seed embeddings (WavLMModel)
+ultralytics==8.1.47          # YOLOv8 face/person detection (Layer 1)
+insightface==0.7.3           # face embeddings (Layer 1)
+onnxruntime-gpu==1.17.1      # InsightFace backend (install from the CUDA-12 feed)
+numpy==1.26.4                # pin <2.0 — torch 2.1.2 predates the NumPy 2 ABI
+soundfile>=0.12              # wav backend for torchaudio (slicing uses stdlib wave)
+
+# --- NOT on PyPI — stage locally, verify by SHA-256 at the gate ---
+# EEND-M2F  : vendored/custom diarization head (no PyPI package). Provide its
+#             forward pass as `eend_forward_fn` to build_real_adapters().
+# silero-vad: vendored at a pinned commit; ship the jit model + get_speech_timestamps.
+#
+# --- SYSTEM package (not pip) ---
+# ffmpeg    : sudo apt-get install -y ffmpeg   (Layer 0 audio extraction)

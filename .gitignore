@@ -1,0 +1,17 @@
+# WavLM+EEND-M2F pipeline — never commit weights, audio, or session artifacts.
+models/
+session_out/
+*.manifest.jsonl
+*.wav
+work/
+.venv*/
+__pycache__/
+*.pyc
+
+# OS / editor cruft
+.DS_Store
+*_tmp.html
+
+# the SOTA A/B sandbox is a separate tool (and holds a local token) — not part
+# of this pipeline repo.
+sota_sandbox/
